@@ -7,13 +7,8 @@ const globalForPrisma = globalThis as unknown as {
 };
 
 function createPrismaClient() {
-  const databaseUrl = process.env.DATABASE_URL;
-
-  if (!databaseUrl) {
-    throw new Error(
-      "DATABASE_URL bulunamadı. .env.local dosyasında DATABASE_URL tanımlı olmalı."
-    );
-  }
+  const databaseUrl =
+    process.env.DATABASE_URL ?? "postgresql://localhost:5432/placeholder";
 
   // Supabase pooler (6543) + pgbouncer için doğru kullanım
   const pool = new Pool({

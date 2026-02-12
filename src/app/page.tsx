@@ -4,6 +4,8 @@ import VolunteerForm from "@/components/VolunteerForm";
 import { prisma } from "@/lib/prisma";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 
+export const dynamic = "force-dynamic";
+
 export default async function Home() {
   const slides = await prisma.slide.findMany({
     where: { isActive: true, isArchived: false },
