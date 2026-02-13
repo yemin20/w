@@ -1,6 +1,4 @@
-Harika bir teknoloji seçimi. Next.js'in getirdiği bazı katı kurallar yerine **React (Client)** ve **Node.js (Backend)** ayrımı, özellikle kurumsal yönetim paneli ve API entegrasyonları için daha esnek bir yapı sunar.
-
-İHH tasarım dilini ve belirttiğin teknik isterleri birleştiren, production seviyesinde bir **Teknik Tasarım Belgesi (TDD)** hazırladım.
+Bu doküman, İHH tasarım dilini ve teknik isterleri birleştiren, production seviyesinde bir **Teknik Tasarım Belgesi (TDD)** dir. Proje **Next.js** full-stack mimarisi ile geliştirilmektedir.
 
 ---
 
@@ -12,9 +10,8 @@ Bu doküman; haber yönetimi, bağış sistemleri ve gönüllü yönetimini kaps
 
 | Katman | Teknoloji | Açıklama |
 | --- | --- | --- |
-| **Frontend** | React.js (Vite) | Hızlı ve modüler kullanıcı arayüzü. |
-| **Backend** | Node.js (Express) | Esnek ve performanslı API yönetimi. |
-| **Paket Yönetimi** | pnpm | Hızlı, disk dostu paket yönetimi. |
+| **Full-Stack** | Next.js 16 (App Router) | React tabanlı full-stack framework; API routes ve SSR. |
+| **Paket Yönetimi** | npm | Bağımlılık yönetimi. |
 | **Veritabanı** | PostgreSQL | İlişkisel, güvenilir veri depolama. |
 | **ORM** | Prisma | Tip güvenli veritabanı sorgulama ve modelleme. |
 | **Ödeme Sistemi** | iyzico API | Güvenli kredi kartı ile bağış altyapısı. |
@@ -123,21 +120,16 @@ Uygulama iki temel bölümden oluşur:
 
 ```text
 /root
-├── /backend
-│   ├── /prisma (Schema & Migrations)
-│   ├── /src
-│   │   ├── /controllers (Business Logic)
-│   │   ├── /routes (API Endpoints)
-│   │   ├── /middlewares (Auth & Validation)
-│   │   └── app.js
-│   └── .env
-├── /frontend
-│   ├── /src
-│   │   ├── /components (UI Elements)
-│   │   ├── /pages (Home, Blog, Donation, Admin)
-│   │   ├── /services (API Calls)
-│   │   └── tailwind.config.js
-└── pnpm-workspace.yaml
+├── /prisma (Schema & Migrations)
+├── /src
+│   ├── /app
+│   │   ├── /api (API Routes)
+│   │   ├── /admin (Yönetim paneli)
+│   │   ├── haberler, bagis, gonullu, iletisim, hesap-numaralari, giris, kayit
+│   │   └── page.tsx (Ana sayfa)
+│   ├── /components
+│   └── /lib (prisma, iyzico, auth, validations)
+└── package.json
 
 ```
 
@@ -145,11 +137,6 @@ Uygulama iki temel bölümden oluşur:
 
 ## 6. Production Yayına Alma (Deployment)
 
-1. **Veritabanı:** Supabase veya AWS RDS üzerinde bir PostgreSQL instance oluşturulacak.
-2. **Backend:** Render, DigitalOcean App Platform veya Heroku üzerinde Node.js servisi olarak yayınlanacak.
-3. **Frontend:** Vercel veya Netlify üzerinde static site olarak host edilecek.
-4. **SSL/Güvenlik:** iyzico entegrasyonu için HTTPS zorunludur.
-
----
-
-**Sıradaki Adım:** İstersen bu mimariye uygun olarak `iyzico` ödeme entegrasyonu için gerekli olan örnek `Controller` kodlarını veya `Prisma` kurulum komutlarını hazırlayabilirim. Başlayalım mı?
+1. **Veritabanı:** Local PostgreSQL veya Supabase/AWS RDS.
+2. **Uygulama:** Vercel, Netlify veya Docker ile tek bir Next.js uygulaması olarak yayınlanacak.
+3. **SSL/Güvenlik:** iyzico entegrasyonu için HTTPS zorunludur.

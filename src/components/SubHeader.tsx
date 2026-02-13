@@ -1,12 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import {
-  BuildingLibraryIcon,
-  PhoneIcon,
-  GiftIcon,
-  ShoppingCartIcon,
-} from "@heroicons/react/24/outline";
+import { BuildingLibraryIcon, PhoneIcon } from "@heroicons/react/24/outline";
 
 const items = [
   {
@@ -18,16 +13,6 @@ const items = [
     label: "Bize Ulaşın",
     href: "/iletisim",
     icon: PhoneIcon,
-  },
-  {
-    label: "Hediye Bağışı",
-    href: "/hediye-bagis",
-    icon: GiftIcon,
-  },
-  {
-    label: "Kumanya Kart",
-    href: "/kumanya-kart",
-    icon: ShoppingCartIcon,
   },
 ];
 

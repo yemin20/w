@@ -1,44 +1,32 @@
 import { NextResponse } from "next/server";
 import { prisma } from "./prisma";
-import { createSupabaseServerClient } from "./supabase/server";
+import { getSession } from "./auth";
 
 export type AuthContext = {
   userId: string;
   role: "EDITOR" | "ADMIN" | "SUPERADMIN";
-  unitId: string;
 };
 
+/** Admin panel için yetki kontrolü - EDITOR, ADMIN, SUPERADMIN gerekli */
 export async function requireAuth() {
-  const supabase = await createSupabaseServerClient();
-  const { data, error } = await supabase.auth.getUser();
-
-  if (error || !data?.user) {
+  const session = await getSession();
+  if (!session) {
     return {
       ok: false as const,
       res: NextResponse.json({ error: "UNAUTHORIZED" }, { status: 401 }),
     };
   }
 
-  const userId = data.user.id;
-
-  const profile = await prisma.userProfile.findUnique({
-    where: { id: userId },
-    select: { role: true, unitId: true },
-  });
-
-  if (!profile) {
+  const { role } = session;
+  if (role === "MEMBER") {
     return {
       ok: false as const,
-      res: NextResponse.json({ error: "NO_PROFILE" }, { status: 403 }),
+      res: NextResponse.json({ error: "FORBIDDEN", message: "Admin yetkisi gerekli" }, { status: 403 }),
     };
   }
 
   return {
     ok: true as const,
-    ctx: { userId, role: profile.role, unitId: profile.unitId } satisfies AuthContext,
+    ctx: { userId: session.id, role } satisfies AuthContext,
   };
-}
-
-export function canManageUnit(ctx: AuthContext, unitId: string) {
-  return ctx.role === "SUPERADMIN" || ctx.unitId === unitId;
 }

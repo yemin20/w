@@ -2,6 +2,7 @@ import "./globals.css";
 import TopBar from "@/components/TopBar";
 import MainHeader from "@/components/MainHeader";
 import SubHeader from "@/components/SubHeader";
+import Footer from "@/components/Footer";
 
 export default function RootLayout({
   children
@@ -10,7 +11,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="tr">
-      <body className="bg-white text-gray-900">
+      <body className="bg-white text-gray-900 flex flex-col min-h-screen">
         {/* SABİT */}
         <TopBar />
         <MainHeader />
@@ -19,9 +20,11 @@ export default function RootLayout({
         <SubHeader />
 
         {/* SAYFA İÇERİĞİ */}
-        <main className="pt-[80px]">
+        <main className="pt-[80px] flex-1">
           {children}
         </main>
+
+        <Footer />
       </body>
     </html>
   );

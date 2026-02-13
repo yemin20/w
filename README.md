@@ -2,7 +2,15 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Getting Started
 
-First, run the development server:
+### Docker (önerilen – PostgreSQL dahil)
+
+```bash
+docker compose up --build
+```
+
+Uygulama: http://localhost:3000
+
+### Geliştirme (yerel)
 
 ```bash
 npm run dev

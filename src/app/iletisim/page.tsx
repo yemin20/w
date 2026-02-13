@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   PhoneIcon,
   EnvelopeIcon,
@@ -8,7 +8,22 @@ import {
   CheckCircleIcon,
 } from "@heroicons/react/24/outline";
 
+type ContactInfo = {
+  orgName: string;
+  address: string;
+  phone: string;
+  email: string;
+};
+
+const defaultContact: ContactInfo = {
+  orgName: "Sakarya İHH",
+  address: "Cumhuriyet Mahallesi Uzunçarşı 1. Geçit No:2, Adapazarı / Sakarya",
+  phone: "(0264) 777 24 44",
+  email: "sakaryaihh@gmail.com",
+};
+
 export default function IletisimPage() {
+  const [contact, setContact] = useState<ContactInfo>(defaultContact);
   const [form, setForm] = useState({
     name: "",
     phone: "",
@@ -20,6 +35,13 @@ export default function IletisimPage() {
   const [errors, setErrors] = useState<any>({});
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    fetch("/api/settings/contact")
+      .then((res) => res.json())
+      .then((data) => setContact({ ...defaultContact, ...data }))
+      .catch(() => {});
+  }, []);
 
   const validate = () => {
     const newErrors: any = {};
@@ -97,10 +119,10 @@ export default function IletisimPage() {
           <div>
             <h3 className="font-semibold text-lg mb-1">Telefon</h3>
             <a
-              href="tel:02647772444"
+              href={`tel:${contact.phone.replace(/\s/g, "")}`}
               className="text-gray-700 hover:text-green-600 transition"
             >
-              (0264) 777 24 44
+              {contact.phone}
             </a>
           </div>
         </div>
@@ -110,10 +132,10 @@ export default function IletisimPage() {
           <div>
             <h3 className="font-semibold text-lg mb-1">E-posta</h3>
             <a
-              href="mailto:sakaryaihh@gmail.com"
+              href={`mailto:${contact.email}`}
               className="text-gray-700 hover:text-green-600 transition"
             >
-              sakaryaihh@gmail.com
+              {contact.email}
             </a>
           </div>
         </div>
@@ -122,10 +144,7 @@ export default function IletisimPage() {
           <MapPinIcon className="w-8 h-8 text-green-600" />
           <div>
             <h3 className="font-semibold text-lg mb-1">Adres</h3>
-            <p className="text-gray-700">
-              Cumhuriyet Mahallesi Uzunçarşı 1. Geçit No:2, Adapazarı / Sakarya,
-              Türkiye
-            </p>
+            <p className="text-gray-700">{contact.address}</p>
           </div>
         </div>
       </div>

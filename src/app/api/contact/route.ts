@@ -1,16 +1,18 @@
 import { NextResponse } from "next/server";
 import nodemailer from "nodemailer";
+import { contactSchema } from "@/lib/validations";
 
 export async function POST(req: Request) {
   try {
-    const { name, phone, email, message } = await req.json();
-
-    if (!name || !phone || !email || !message) {
+    const parsed = contactSchema.safeParse(await req.json());
+    if (!parsed.success) {
       return NextResponse.json(
-        { error: "Tüm alanlar zorunludur" },
+        { error: "VALIDATION_ERROR", details: parsed.error.flatten() },
         { status: 400 }
       );
     }
+
+    const { name, phone, email, message } = parsed.data;
 
     const transporter = nodemailer.createTransport({
       host: "smtp.gmail.com",
